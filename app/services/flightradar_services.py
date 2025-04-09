@@ -26,7 +26,7 @@ class SaveResult:
 class FlightDataService:
     def __init__(self):
         self.airport_cache: Dict[str, dict] = {}
-        self.airline_cache: Dict[str, dict] = {}  # {ICAO: {'name': str, 'code': str}}
+        self.airline_cache: Dict[str, dict] = {}  
         self.black_sea_coords = (43.0, 34.0)
         self.is_running = True
 
@@ -36,7 +36,7 @@ class FlightDataService:
             airlines = fr_api.get_airlines()
             for airline in airlines:
                 icao = airline.get('ICAO', '').upper()
-                if icao:  # Используем только записи с валидным ICAO кодом
+                if icao:  
                     self.airline_cache[icao] = {
                         'name': airline.get('Name', icao),
                         'code': airline.get('Code', ''),
@@ -122,7 +122,7 @@ class FlightDataService:
 
     async def _save_to_db(self, session: AsyncSession, flights):
         """Сохраняет рейсы в базу данных"""
-        from app.db.models.flight import Flight
+        from db.models.flight import Flight
 
         for flight in flights:
             airline_info = self._get_airline_info(flight)
@@ -258,8 +258,8 @@ class FlightDataService:
 
     async def get_last_hour_flights(self) -> List:
         """Возвращает рейсы за последний час из базы данных"""
-        from app.db.models.flight import Flight
-        from app.db.session import async_session
+        from db.models.flight import Flight
+        from db.session import async_session
 
         async with async_session() as session:
             hour_ago = datetime.now() - timedelta(hours=1)
@@ -270,8 +270,8 @@ class FlightDataService:
 
     async def get_last_day_stats(self) -> List[Tuple[str, int]]:
         """Возвращает статистику за последние 24 часа из базы данных"""
-        from app.db.models.flight import Flight
-        from app.db.session import async_session
+        from db.models.flight import Flight
+        from db.session import async_session
         from sqlalchemy import func
 
         async with async_session() as session:
