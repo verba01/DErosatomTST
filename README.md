@@ -2,6 +2,8 @@
 
 pip install poetry
 
+poetry lock
+
 poetry install
 
 docker-compose up -d
